@@ -1,0 +1,14 @@
+do for [i=0:80] {
+	x = i*0.05+1
+	outfile = sprintf('wykresy/delta_od_z_dla_L_%.2f.png', x)
+	infile = sprintf('dane/delta_od_z_dla_L_%.2f.txt', x)
+
+	set terminal pngcairo size 800,640 enhanced font 'Verdana,15'
+	set output outfile
+	set xlabel 'z [nm]'
+	set ylabel '{/Symbol D} [meV]'
+	set key off
+
+	plot infile pointtype 26
+
+}

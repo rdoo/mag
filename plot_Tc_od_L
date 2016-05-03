@@ -1,0 +1,7 @@
+set terminal pngcairo size 800,640 enhanced font 'Verdana,15'
+set output 'wykresy/Tc_od_L.png'
+set xlabel 'L [nm]'
+set ylabel 'Tc [K]'
+set key off
+
+plot 'dane/Tc_od_L.txt' pointtype 26

@@ -1,0 +1,7 @@
+set terminal pngcairo size 800,640 enhanced font 'Verdana,15'
+set output 'wykresy/delta_od_L.png'
+set xlabel 'L [nm]'
+set ylabel '{/Symbol D} [meV]'
+set key off
+
+plot 'dane/delta_od_L.txt' pointtype 26

@@ -40,7 +40,7 @@ const double T_max = 10;
 const double dT = 0.1;
 
 const int max_liczba_iteracji = 1e6;
-const double prog_akceptacji_Tc = 1e-5;
+const double prog_akceptacji_Tc = 1e-4;
 
 
 // pomocnicza funkcja wypisujaca na ekran

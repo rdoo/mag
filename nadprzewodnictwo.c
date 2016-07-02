@@ -397,7 +397,7 @@ int main() {
 		//double sumaKoncowaDelty = sumaTablicy(nastepnaDelta);
 		//wypisz("Koncowy wynik delty", sumaKoncowaDelty);
 wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
-		fprintf(plik_delta_od_T, "%.1f %.20f\n", T, nastepna_delta[0]/eV2au/mili);
+		fprintf(plik_delta_od_T, "%.2f %.20f\n", T, nastepna_delta[0]/eV2au/mili);
 
 		if (nastepna_delta[0]/eV2au/mili < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
 			fprintf(plik_Tc_od_L, "%.2f %.1f\n", L/nm2au, T);

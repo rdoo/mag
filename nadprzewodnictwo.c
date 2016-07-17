@@ -22,6 +22,7 @@ const double gN0 = 0.18; // potrzebne do stalej oddzialywania g
 const double EDebye = 32.31 * mili * eV2au; // energia Debye'a
 const double L_min = nm2au; // poczatkowa grubosc warstwy
 const double L_max = 5 * nm2au; // koncowa grubosc warstwy
+const double dL = nm2au / 20;
 double potencjal_chem = 0.9 * eV2au; // potencjal chemiczny
 double L; // aktualna grubosc warstwy (zainicjalizowana w glownej petli)
 double g; // stala oddzialywania elektron-fonon (zainicjalizowana w mainie)
@@ -309,7 +310,7 @@ int main() {
 	wypisz("Poczatkowa gestosc elektronow na cm^3", poczatkowa_gestosc_elektronow*nm2au*nm2au*nm2au*1e21);
 	
 	// glowna petla liczaca delty dla roznych grubosci L
-	for (L = L_min; L <= L_max; L += L_min / 20) {
+	for (L = L_min; L <= L_max; L += dL) {
 	  
 
 	  	T = T_min;

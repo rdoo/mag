@@ -315,7 +315,11 @@ int main() {
 	plik_potencjal_od_L = fopen("dane/potencjal_od_L.txt", "w");
 
 	FILE *plik_Tc_od_L;
-	plik_Tc_od_L = fopen("dane/Tc_od_L.txt", "w");
+	plik_Tc_od_L = fopen("dane/Tc_od_L.txt", "a");
+
+	int qwerty; // TODO: posprzatac jesli dziala
+	for (qwerty = 0; qwerty < 10; qwerty++) {
+		wypisz("Numer petli", qwerty);
 
 	double poczatkowa_gestosc_elektronow = gestoscElektronowWModelu3D();
 	wypisz("Poczatkowa gestosc elektronow na cm^3", poczatkowa_gestosc_elektronow*nm2au*nm2au*nm2au*1e21);
@@ -427,6 +431,8 @@ wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
 
 		}
 		fclose(plik_delta_od_T);
+	}
+
 	}
 
 	fclose(plik_delta_od_L);

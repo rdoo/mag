@@ -425,7 +425,7 @@ wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
 		}
 
 		if (nastepna_delta[0]/eV2au/mili < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
-			fprintf(plik_Tc_od_L, "%.2f %.1f\n", L/nm2au, T);
+			fprintf(plik_Tc_od_L, "%.2f %.20f\n", L/nm2au, T);
 			break;
 		}
 
@@ -433,7 +433,7 @@ wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
 		fclose(plik_delta_od_T);
 
 
-		if (!niejednorodnosc) { // przerwij petle jesli nie jest liczona niejednoro
+		if (!niejednorodnosc) { // przerwij petle jesli nie jest liczona niejednorosc
 			break;
 		}
 	}

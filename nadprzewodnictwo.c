@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 // STALE
 #define nm2au 18.89726133921252
@@ -26,7 +27,9 @@ const double dL = nm2au / 20;
 double potencjal_chem = 0.9 * eV2au; // potencjal chemiczny
 double L; // aktualna grubosc warstwy (zainicjalizowana w glownej petli)
 double g; // stala oddzialywania elektron-fonon (zainicjalizowana w mainie)
-double kF; // wektor Fermiego 
+double kF; // wektor Fermiego
+
+const int niejednorodnosc = 1; // czy brac pod uwage niejednorodnosc powierzchni
 
 // PARAMETRY CALKOWANIA
 const double dz = 0.01 * nm2au; // przedzial calkowania 
@@ -119,6 +122,12 @@ double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j) {
 		
 		for (i = 0; i < N; i++) {
 			Ekin = (i+1)*(i+1)*M_PI*M_PI/(2*masa_e*L*L)+k*k/2.0/masa_e-potencjal_chem;
+
+			if (niejednorodnosc) {
+				double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
+				Ekin += alfa * (i+1)*(i+1)*M_PI*M_PI/(masa_e*L*L*L) * 0.286 * nm2au; // 0.286 to 1 ML dla Pb
+			}
+
 			E=sqrt(Ekin*Ekin+poprzednia_delta[i]*poprzednia_delta[i]);
 			//printf("%e\n",Ekin/eV2au);
 			if (fabs(Ekin) <= EDebye) {				
@@ -288,6 +297,8 @@ void obliczanieRozkladuDeltaOdZ(double* delta_nadprzewodzaca) {
 }
 
 int main() {
+	srand(time(NULL));
+
 	kF=sqrt(2.0*masa_e*potencjal_chem);
 	g = gN0 / (masa_e * kF / (2. * M_PI * M_PI));
 

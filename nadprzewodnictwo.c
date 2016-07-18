@@ -415,11 +415,6 @@ int main() {
 wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
 		fprintf(plik_delta_od_T, "%.2f %.20f\n", T, nastepna_delta[0]/eV2au/mili);
 
-		if (nastepna_delta[0]/eV2au/mili < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
-			fprintf(plik_Tc_od_L, "%.2f %.1f\n", L/nm2au, T);
-			break;
-		}
-
 		if (pierwsza_petla == 1) {
 
 			fprintf(plik_delta_od_L, "%.2f %.20f\n", L/nm2au, nastepna_delta[0]/eV2au/mili);
@@ -429,8 +424,18 @@ wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
 			pierwsza_petla = 0;
 		}
 
+		if (nastepna_delta[0]/eV2au/mili < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
+			fprintf(plik_Tc_od_L, "%.2f %.1f\n", L/nm2au, T);
+			break;
+		}
+
 		}
 		fclose(plik_delta_od_T);
+
+
+		if (!niejednorodnosc) { // przerwij petle jesli nie jest liczona niejednoro
+			break;
+		}
 	}
 
 	}

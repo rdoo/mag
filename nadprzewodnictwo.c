@@ -124,7 +124,7 @@ double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j, double Ekin
 			Ekin = (i+1)*(i+1)*M_PI*M_PI/(2*masa_e*L*L)+k*k/2.0/masa_e-potencjal_chem;
 
 			if (niejednorodnosc) {
-				Ekin += Ekin_add
+				Ekin += Ekin_add;
 			}
 
 			E=sqrt(Ekin*Ekin+poprzednia_delta[i]*poprzednia_delta[i]);

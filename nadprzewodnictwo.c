@@ -15,7 +15,7 @@ const double stala_kb = 3.16681520371153e-6; // stala boltzmanna w j. a.
 
 // PARAMETRY PROGRAMU
 const int N = 20; // liczba pasm
-const double prog_samouzgodnienia = 0.001 * mili * eV2au; // jezeli roznica pomiedzy poprzednia delta i nastepna jest mniejsza to program stopuje (na wykresie rzedu 0.01miliev)
+const double prog_samouzgodnienia = 0.0001 * mili * eV2au; // jezeli roznica pomiedzy poprzednia delta i nastepna jest mniejsza to program stopuje (na wykresie rzedu 0.01miliev)
 const double delta0 = 0.25 * mili * eV2au; // poczatkowa przerwa nadprzewodzaca
 double T = 0.1; // temperatura
 const double potencjal_chem_09eV = 0.9 * eV2au; // poczatkowy potencjal chemiczny

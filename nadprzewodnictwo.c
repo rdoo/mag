@@ -110,7 +110,7 @@ double wartoscRozkladuFermiego(double E) {
 	return 1.0 / (1.0 + exp(E / (stala_kb * T)));
 }
 
-double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j) {
+double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j, double Ekin_add) {
 	double kp = k_min; // k poczatkowe
 	double kk = k_max; // k koncowe
 
@@ -124,8 +124,7 @@ double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j) {
 			Ekin = (i+1)*(i+1)*M_PI*M_PI/(2*masa_e*L*L)+k*k/2.0/masa_e-potencjal_chem;
 
 			if (niejednorodnosc) {
-				double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
-				Ekin += alfa * (i+1)*(i+1)*M_PI*M_PI/(masa_e*L*L*L) * 0.286 * nm2au; // 0.286 to 1 ML dla Pb
+				Ekin += Ekin_add
 			}
 
 			E=sqrt(Ekin*Ekin+poprzednia_delta[i]*poprzednia_delta[i]);
@@ -362,6 +361,13 @@ int main() {
 			}
 		}
 
+		double Ekin_add = 0.;
+
+		if (niejednorodnosc) {
+			double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
+			Ekin_add = alfa * (i+1)*(i+1)*M_PI*M_PI/(masa_e*L*L*L) * 0.286 * nm2au; // 0.286 to 1 ML dla Pb
+		}
+
 
 		FILE *plik_delta_od_T;
 		char nazwa_pliku[64];
@@ -401,7 +407,7 @@ int main() {
 			//printf("\n");
 			
 			for (i = 0; i < N; i++) {
-				nastepna_delta[i] = wartoscDelta(poprzednia_delta, C, i);
+				nastepna_delta[i] = wartoscDelta(poprzednia_delta, C, i, Ekin_add);
 			}
 			
 			for (i = 0; i < N; i++) {
@@ -415,7 +421,7 @@ int main() {
 wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
 		fprintf(plik_delta_od_T, "%.2f %.20f\n", T, nastepna_delta[0]/eV2au/mili);
 
-		if (pierwsza_petla == 1) {
+		if (pierwsza_petla == 1 && !niejednorodnosc) { // nie licz tych rzeczy jesli liczymy niejednorodnosc
 
 			fprintf(plik_delta_od_L, "%.2f %.20f\n", L/nm2au, nastepna_delta[0]/eV2au/mili);
 
@@ -426,6 +432,10 @@ wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
 
 		if (nastepna_delta[0]/eV2au/mili < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
 			fprintf(plik_Tc_od_L, "%.2f %.20f\n", L/nm2au, T);
+			break;
+		}
+
+		if (niejednorodnosc) { // jesli liczymy niejednorodnosc to nie interesuja nas pozostale temperatury
 			break;
 		}
 

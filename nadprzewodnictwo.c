@@ -110,7 +110,7 @@ double wartoscRozkladuFermiego(double E) {
 	return 1.0 / (1.0 + exp(E / (stala_kb * T)));
 }
 
-double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j, double Ekin_add) {
+double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j) {
 	double kp = k_min; // k poczatkowe
 	double kk = k_max; // k koncowe
 
@@ -124,7 +124,8 @@ double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j, double Ekin
 			Ekin = (i+1)*(i+1)*M_PI*M_PI/(2*masa_e*L*L)+k*k/2.0/masa_e-potencjal_chem;
 
 			if (niejednorodnosc) {
-				Ekin += Ekin_add;
+				double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
+				Ekin += alfa * (i+1)*(i+1)*M_PI*M_PI/(masa_e*L*L*L) * 0.286 * nm2au; // 0.286 to 1 ML dla Pb
 			}
 
 			E=sqrt(Ekin*Ekin+poprzednia_delta[i]*poprzednia_delta[i]);
@@ -363,13 +364,6 @@ int main() {
 				}
 			}
 
-			double Ekin_add = 0.;
-
-			if (niejednorodnosc) {
-				double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
-				Ekin_add = alfa * (i+1)*(i+1)*M_PI*M_PI/(masa_e*L*L*L) * 0.286 * nm2au; // 0.286 to 1 ML dla Pb
-			}
-
 
 			FILE *plik_delta_od_T;
 			char nazwa_pliku[64];
@@ -409,7 +403,7 @@ int main() {
 					//printf("\n");
 					
 					for (i = 0; i < N; i++) {
-						nastepna_delta[i] = wartoscDelta(poprzednia_delta, C, i, Ekin_add);
+						nastepna_delta[i] = wartoscDelta(poprzednia_delta, C, i);
 					}
 					
 					for (i = 0; i < N; i++) {
@@ -445,13 +439,11 @@ int main() {
 
 			}
 			fclose(plik_delta_od_T);
-
-
-			if (!niejednorodnosc) { // przerwij petle jesli nie jest liczona niejednorosc
-				break;
-			}
 		}
 
+		if (!niejednorodnosc) { // przerwij petle jesli nie jest liczona niejednorosc
+			break;
+		}
 	}
 
 	fclose(plik_delta_od_L);

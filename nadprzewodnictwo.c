@@ -301,6 +301,8 @@ int main() {
 	kF=sqrt(2.0*masa_e*potencjal_chem);
 	g = gN0 / (masa_e * kF / (2. * M_PI * M_PI));
 
+	T = T_min;
+
 	// wypisz("Prog samouzgodnienia wynosi", progSamouzgodnienia);
 	// wypisz("Delta0 wynosi", delta0);
 	// wypisz("EDebye wynosi", EDebye);
@@ -316,137 +318,137 @@ int main() {
 	FILE *plik_Tc_od_L;
 	plik_Tc_od_L = fopen("dane/Tc_od_L.txt", "a");
 
-	int qwerty; // TODO: posprzatac jesli dziala
-	for (qwerty = 0; qwerty < 10; qwerty++) {
-		wypisz("Numer petli", qwerty);
+	int licznik_petli; // jesli chcemy cale obiczenia wykonac kilkukrotnie np. do obliczenia sredniej
+	for (licznik_petli = 0; licznik_petli < 10; licznik_petli++) {
+		wypisz("Numer petli", licznik_petli);
 
-	double poczatkowa_gestosc_elektronow = gestoscElektronowWModelu3D();
-	wypisz("Poczatkowa gestosc elektronow na cm^3", poczatkowa_gestosc_elektronow*nm2au*nm2au*nm2au*1e21);
-	
-	// glowna petla liczaca delty dla roznych grubosci L
-	for (L = L_min; L <= L_max; L += dL) {
-	  
-
-	  	T = T_min;
-	  
-		//L=2*nm2au;
-		wypisz("Obliczenia dla L w nm", L/nm2au);
-		int i, j;
-
-
-		// tablica przechowujaca wartosc poczatkowa DELTAi
-		double poczatkowa_delta[N];
-		for (i = 0; i < N; i++) {
-			poczatkowa_delta[i] = wartoscPoczatkowejDelty(i + 1);
-			//wypisz("Poczatkowa delta", wartoscPoczatkowejDelty(i + 1));
-		}
+		double poczatkowa_gestosc_elektronow = gestoscElektronowWModelu3D();
+		wypisz("Poczatkowa gestosc elektronow na cm^3", poczatkowa_gestosc_elektronow*nm2au*nm2au*nm2au*1e21);
 		
-		
-		potencjal_chem = potencjalChemicznyMetodaBisekcji(poczatkowa_gestosc_elektronow, poczatkowa_delta);
+		// glowna petla liczaca delty dla roznych grubosci L
+		for (L = L_min; L <= L_max; L += dL) {
+		  
 
-		wypisz("Potencjal chemiczny w eV", potencjal_chem/eV2au);
+		  	T = T_min;
+		  
+			//L=2*nm2au;
+			wypisz("Obliczenia dla L w nm", L/nm2au);
+			int i, j;
 
-		
-		fprintf(plik_potencjal_od_L, "%.2f %.20f\n", L/nm2au, potencjal_chem/eV2au);
-		
-		
 
-
-		// tablica przechowujaca wartosc stalych Cij
-		double C[N][N];
-		for (i = 0; i < N; i++) {
-			for (j = 0; j < N; j++) {
-					C[i][j] = wartoscC(i + 1, j + 1);
-					//wypisz("C", wartoscC(i + 1, j + 1));
+			// tablica przechowujaca wartosc poczatkowa DELTAi
+			double poczatkowa_delta[N];
+			for (i = 0; i < N; i++) {
+				poczatkowa_delta[i] = wartoscPoczatkowejDelty(i + 1);
+				//wypisz("Poczatkowa delta", wartoscPoczatkowejDelty(i + 1));
 			}
-		}
+			
+			
+			potencjal_chem = potencjalChemicznyMetodaBisekcji(poczatkowa_gestosc_elektronow, poczatkowa_delta); // potencjal czyli mi
 
-		double Ekin_add = 0.;
+			wypisz("Potencjal chemiczny w eV", potencjal_chem/eV2au);
 
-		if (niejednorodnosc) {
-			double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
-			Ekin_add = alfa * (i+1)*(i+1)*M_PI*M_PI/(masa_e*L*L*L) * 0.286 * nm2au; // 0.286 to 1 ML dla Pb
-		}
+			
+			fprintf(plik_potencjal_od_L, "%.2f %.20f\n", L/nm2au, potencjal_chem/eV2au);
+			
+			
 
 
-		FILE *plik_delta_od_T;
-		char nazwa_pliku[64];
-		snprintf(nazwa_pliku, sizeof nazwa_pliku, "dane/delta_od_T_dla_L_%.2f.txt", L/nm2au);
-		plik_delta_od_T = fopen(nazwa_pliku, "w");
+			// tablica przechowujaca wartosc stalych Cij
+			double C[N][N];
+			for (i = 0; i < N; i++) {
+				for (j = 0; j < N; j++) {
+						C[i][j] = wartoscC(i + 1, j + 1);
+						//wypisz("C", wartoscC(i + 1, j + 1));
+				}
+			}
 
-		int pierwsza_petla = 1;
-		for (T = T_min; T <= T_max; T += dT) {
-		wypisz("Aktualna temperatura", T);
+			double Ekin_add = 0.;
 
-		// ALGORYTM SAMOUZGODNIENIA TODO nie wiem czy poprawny
-		double poprzednia_delta[N];
-		double poprzednia_delta_kopia[N];
-		double nastepna_delta[N];
-		
-		for (i = 0; i < N; i++) {
-			poprzednia_delta[i] = poczatkowa_delta[i];
-		}
+			if (niejednorodnosc) {
+				double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
+				Ekin_add = alfa * (i+1)*(i+1)*M_PI*M_PI/(masa_e*L*L*L) * 0.286 * nm2au; // 0.286 to 1 ML dla Pb
+			}
 
-		int liczba_iteracji = 0;
-		
-		do {
-			liczba_iteracji++;
-			//wypisz("liczba_iteracji", liczba_iteracji);
 
-			if (liczba_iteracji > max_liczba_iteracji) {
+			FILE *plik_delta_od_T;
+			char nazwa_pliku[64];
+			snprintf(nazwa_pliku, sizeof nazwa_pliku, "dane/delta_od_T_dla_L_%.2f.txt", L/nm2au);
+			plik_delta_od_T = fopen(nazwa_pliku, "w");
+
+			int pierwsza_petla = 1;
+			for (T = T_min; T <= T_max; T += dT) {
+				wypisz("Aktualna temperatura", T);
+
+				// ALGORYTM SAMOUZGODNIENIA TODO nie wiem czy poprawny
+				double poprzednia_delta[N];
+				double poprzednia_delta_kopia[N];
+				double nastepna_delta[N];
+				
+				for (i = 0; i < N; i++) {
+					poprzednia_delta[i] = poczatkowa_delta[i];
+				}
+
+				int liczba_iteracji = 0;
+				
+				do {
+					liczba_iteracji++;
+					//wypisz("liczba_iteracji", liczba_iteracji);
+
+					if (liczba_iteracji > max_liczba_iteracji) {
+						break;
+					}
+
+					for (i = 0; i < N; i++) {
+						poprzednia_delta_kopia[i] = poprzednia_delta[i];
+					}
+					
+					//for (i = 0; i < N; i++) {
+					//	printf("%e ", poprzedniaDelta[i]);
+					//}
+					//printf("\n");
+					
+					for (i = 0; i < N; i++) {
+						nastepna_delta[i] = wartoscDelta(poprzednia_delta, C, i, Ekin_add);
+					}
+					
+					for (i = 0; i < N; i++) {
+						poprzednia_delta[i] = nastepna_delta[i];
+					}
+					
+				} while (sprawdzRoznice(poprzednia_delta_kopia, nastepna_delta));
+
+				//double sumaKoncowaDelty = sumaTablicy(nastepnaDelta);
+				//wypisz("Koncowy wynik delty", sumaKoncowaDelty);
+				wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
+				fprintf(plik_delta_od_T, "%.2f %.20f\n", T, nastepna_delta[0]/eV2au/mili);
+
+				if (pierwsza_petla == 1 && !niejednorodnosc) { // nie licz tych rzeczy jesli liczymy niejednorodnosc
+
+					fprintf(plik_delta_od_L, "%.2f %.20f\n", L/nm2au, nastepna_delta[0]/eV2au/mili);
+
+					obliczanieDyspersji(nastepna_delta);
+					obliczanieRozkladuDeltaOdZ(nastepna_delta);
+					pierwsza_petla = 0;
+				}
+
+				if (nastepna_delta[0]/eV2au/mili < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
+					fprintf(plik_Tc_od_L, "%.2f %.20f\n", L/nm2au, T);
+					break;
+				}
+
+				if (niejednorodnosc) { // jesli liczymy niejednorodnosc to nie interesuja nas pozostale temperatury
+					break;
+				}
+
+			}
+			fclose(plik_delta_od_T);
+
+
+			if (!niejednorodnosc) { // przerwij petle jesli nie jest liczona niejednorosc
 				break;
 			}
-
-			for (i = 0; i < N; i++) {
-				poprzednia_delta_kopia[i] = poprzednia_delta[i];
-			}
-			
-			//for (i = 0; i < N; i++) {
-			//	printf("%e ", poprzedniaDelta[i]);
-			//}
-			//printf("\n");
-			
-			for (i = 0; i < N; i++) {
-				nastepna_delta[i] = wartoscDelta(poprzednia_delta, C, i, Ekin_add);
-			}
-			
-			for (i = 0; i < N; i++) {
-				poprzednia_delta[i] = nastepna_delta[i];
-			}
-			
-		} while (sprawdzRoznice(poprzednia_delta_kopia, nastepna_delta));
-
-		//double sumaKoncowaDelty = sumaTablicy(nastepnaDelta);
-		//wypisz("Koncowy wynik delty", sumaKoncowaDelty);
-wypisz("Liczba iteracji samouzgodnienia", liczba_iteracji);
-		fprintf(plik_delta_od_T, "%.2f %.20f\n", T, nastepna_delta[0]/eV2au/mili);
-
-		if (pierwsza_petla == 1 && !niejednorodnosc) { // nie licz tych rzeczy jesli liczymy niejednorodnosc
-
-			fprintf(plik_delta_od_L, "%.2f %.20f\n", L/nm2au, nastepna_delta[0]/eV2au/mili);
-
-			obliczanieDyspersji(nastepna_delta);
-			obliczanieRozkladuDeltaOdZ(nastepna_delta);
-			pierwsza_petla = 0;
 		}
-
-		if (nastepna_delta[0]/eV2au/mili < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
-			fprintf(plik_Tc_od_L, "%.2f %.20f\n", L/nm2au, T);
-			break;
-		}
-
-		if (niejednorodnosc) { // jesli liczymy niejednorodnosc to nie interesuja nas pozostale temperatury
-			break;
-		}
-
-		}
-		fclose(plik_delta_od_T);
-
-
-		if (!niejednorodnosc) { // przerwij petle jesli nie jest liczona niejednorosc
-			break;
-		}
-	}
 
 	}
 

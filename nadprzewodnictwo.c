@@ -14,22 +14,22 @@ const double stala_kb = 3.16681520371153e-6; // stala boltzmanna w j. a.
 const double M_PI2 = M_PI * M_PI;
 
 // PARAMETRY PROGRAMU
-const int N = 20; // liczba pasm
+int N; // liczba pasm
 double potencjal_chem = 0.9 * eV2au; // potencjal chemiczny
-const double EDebye = 32.31 * mili * eV2au; // energia Debye'a
-const double gN0 = 0.18; // potrzebne do stalej oddzialywania g
-const double masa_e = 1.0; // masa elektronu w j. a.
-const double ML = 0.286 * nm2au;
+double EDebye = 32.31 * mili * eV2au; // energia Debye'a
+double gN0 = 0.18; // potrzebne do stalej oddzialywania g
+double masa_e = 1.0; // masa elektronu w j. a.
+double ML = 0.286 * nm2au;
 
 double L; // aktualna grubosc warstwy (zainicjalizowana w glownej petli)
-const double L_min = nm2au; // poczatkowa grubosc warstwy
-const double L_max = 5 * nm2au; // koncowa grubosc warstwy
-const double dL = nm2au / 20;
+double L_min = 1. * nm2au; // poczatkowa grubosc warstwy
+double L_max = 5. * nm2au; // koncowa grubosc warstwy
+double dL = 0.05 * nm2au;
 
-double T = 0.1; // temperatura
-const double T_min = 0.1;
-const double T_max = 10;
-const double dT = 0.1;
+double T; // temperatura
+double T_min = 0.1;
+double T_max = 10.;
+double dT = 0.1;
 
 const double delta0 = 0.25 * mili * eV2au; // poczatkowa przerwa nadprzewodzaca
 double g; // stala oddzialywania elektron-fonon (zainicjalizowana w mainie)
@@ -43,12 +43,93 @@ const double k_max = 8.0 / nm2au; // k max do calkowania po k
 const double dk = 0.001 / nm2au; // dk do calkowania po k
 
 // INNE PARAMETRY
-const int niejednorodnosc = 1; // czy brac pod uwage niejednorodnosc powierzchni
-const int liczba_petli_programu = 100;
-const double prog_samouzgodnienia = 0.0001 * mili * eV2au; // jezeli roznica pomiedzy poprzednia delta i nastepna jest mniejsza to program stopuje (na wykresie rzedu 0.01miliev)
-const int max_liczba_iteracji = 1e6; // max liczba ietracji algorytmu samouzgodnienia
-const double prog_akceptacji_Tc = 1e-4;
+int niejednorodnosc = 1; // czy brac pod uwage niejednorodnosc powierzchni
+int liczba_petli_programu = 100;
+double prog_samouzgodnienia = 0.0001 * mili * eV2au; // jezeli roznica pomiedzy poprzednia delta i nastepna jest mniejsza to program stopuje (na wykresie rzedu 0.01miliev)
+int max_liczba_iteracji = 1e6; // max liczba ietracji algorytmu samouzgodnienia
+double prog_akceptacji_Tc = 1e-4;
 
+
+void wczytajConfig() {
+	FILE *plik_config;
+	plik_config = fopen("config.txt", "r");
+	fscanf(plik_config, "%*[^\n]\n", NULL); // pomija pierwsza linie
+
+	fscanf(plik_config, "N = %d\n", &N);
+	printf("N = '%d'\n", N);
+
+	fscanf(plik_config, "potencjal_chem = %lf\n", &potencjal_chem);
+	potencjal_chem *= eV2au;
+	printf("potencjal_chem = '%.20lf'\n", potencjal_chem);
+
+	printf("EDebye = '%.20lf'\n", EDebye);
+	fscanf(plik_config, "EDebye = %lf\n", &EDebye);
+	EDebye *= mili * eV2au;
+	printf("EDebye = '%.20lf'\n", EDebye);
+
+		printf("gN0 = '%.20lf'\n", gN0);
+	fscanf(plik_config, "gN0 = %lf\n", &gN0);
+	printf("gN0 = '%.20lf'\n", gN0);
+
+			printf("masa_e = '%.20lf'\n", masa_e);
+	fscanf(plik_config, "masa_e = %lf\n", &masa_e);
+	printf("masa_e = '%.20lf'\n", masa_e);
+
+		printf("ML = '%.20lf'\n", ML);
+	fscanf(plik_config, "ML = %lf\n", &ML);
+	ML *= nm2au;
+	printf("ML = '%.20lf'\n", ML);
+
+			printf("L_min = '%.20lf'\n", L_min);
+	fscanf(plik_config, "L_min = %lf\n", &L_min);
+	L_min *= nm2au;
+	printf("L_min = '%.20lf'\n", L_min);
+
+				printf("L_max = '%.20lf'\n", L_max);
+	fscanf(plik_config, "L_max = %lf\n", &L_max);
+	L_max *= nm2au;
+	printf("L_max = '%.20lf'\n", L_max);
+
+					printf("dL = '%.20lf'\n", dL);
+	fscanf(plik_config, "dL = %lf\n", &dL);
+	dL *= nm2au;
+	printf("dL = '%.20lf'\n", dL);
+
+				printf("T_min = '%.20lf'\n", T_min);
+	fscanf(plik_config, "T_min = %lf\n", &T_min);
+	printf("T_min = '%.20lf'\n", T_min);
+
+					printf("T_max = '%.20lf'\n", T_max);
+	fscanf(plik_config, "T_max = %lf\n", &T_max);
+	printf("T_max = '%.20lf'\n", T_max);
+
+					printf("dT = '%.20lf'\n", dT);
+	fscanf(plik_config, "dT = %lf\n", &dT);
+	printf("dT = '%.20lf'\n", dT);
+
+						printf("niejednorodnosc = '%d'\n", niejednorodnosc);
+	fscanf(plik_config, "niejednorodnosc = %d\n", &niejednorodnosc);
+	printf("niejednorodnosc = '%d'\n", niejednorodnosc);
+
+							printf("liczba_petli_programu = '%d'\n", liczba_petli_programu);
+	fscanf(plik_config, "liczba_petli_programu = %d\n", &liczba_petli_programu);
+	printf("liczba_petli_programu = '%d'\n", liczba_petli_programu);
+
+						printf("prog_samouzgodnienia = '%.20lf'\n", prog_samouzgodnienia);
+	fscanf(plik_config, "prog_samouzgodnienia = %lf\n", &prog_samouzgodnienia);
+	prog_samouzgodnienia *= mili * eV2au;
+	printf("prog_samouzgodnienia = '%.20lf'\n", prog_samouzgodnienia);
+
+								printf("max_liczba_iteracji = '%d'\n", max_liczba_iteracji);
+	fscanf(plik_config, "max_liczba_iteracji = %d\n", &max_liczba_iteracji);
+	printf("max_liczba_iteracji = '%d'\n", max_liczba_iteracji);
+
+						printf("prog_akceptacji_Tc = '%.20lf'\n", prog_akceptacji_Tc);
+	fscanf(plik_config, "prog_akceptacji_Tc = %lf\n", &prog_akceptacji_Tc);
+	printf("prog_akceptacji_Tc = '%.20lf'\n", prog_akceptacji_Tc);
+
+	fclose(plik_config);
+}
 
 // pomocnicza funkcja wypisujaca na ekran
 void wypisz(char* string, double value) {
@@ -301,6 +382,8 @@ void obliczanieRozkladuDeltaOdZ(double* delta_nadprzewodzaca) {
 
 int main() {
 	srand(time(NULL));
+
+	wczytajConfig();
 
 	kF=sqrt(2.0*masa_e*potencjal_chem);
 	g = gN0 / (masa_e * kF / (2. * M_PI2));

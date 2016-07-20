@@ -325,9 +325,7 @@ int main() {
 	double poczatkowa_gestosc_elektronow = gestoscElektronowWModelu3D();
 	wypisz("Poczatkowa gestosc elektronow na cm^3", poczatkowa_gestosc_elektronow*nm2au*nm2au*nm2au*1e21);
 
-	int licznik_petli; // jesli chcemy cale obiczenia wykonac kilkukrotnie np. do obliczenia sredniej
-	for (licznik_petli = 0; licznik_petli < liczba_petli_programu; licznik_petli++) {
-		wypisz("Numer petli", licznik_petli);
+
 
 		// glowna petla liczaca delty dla roznych grubosci L
 		for (L = L_min; L <= L_max; L += dL) {
@@ -366,6 +364,13 @@ int main() {
 						//wypisz("C", wartoscC(i + 1, j + 1));
 				}
 			}
+
+			int licznik_petli; // jesli chcemy cale obiczenia wykonac kilkukrotnie np. do obliczenia sredniej
+			for (licznik_petli = 0; licznik_petli < liczba_petli_programu; licznik_petli++) {
+				wypisz("Numer petli", licznik_petli);
+				if (!niejednorodnosc && licznik_petli == 1) { // przerwij petle jesli nie jest liczona niejednorosc
+					break;
+				}
 
 
 			FILE *plik_delta_od_T;
@@ -441,13 +446,14 @@ int main() {
 				}
 
 			}
+
 			fclose(plik_delta_od_T);
+			}
+			
 		}
 
-		if (!niejednorodnosc) { // przerwij petle jesli nie jest liczona niejednorosc
-			break;
-		}
-	}
+
+	
 
 	fclose(plik_delta_od_L);
 	fclose(plik_potencjal_od_L);

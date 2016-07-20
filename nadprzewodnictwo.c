@@ -59,72 +59,57 @@ void wczytajConfig() {
 	printf("N = '%d'\n", N);
 
 	fscanf(plik_config, "potencjal_chem = %lf\n", &potencjal_chem);
-	potencjal_chem *= eV2au;
 	printf("potencjal_chem = '%.20lf'\n", potencjal_chem);
+	potencjal_chem *= eV2au;
 
-	printf("EDebye = '%.20lf'\n", EDebye);
 	fscanf(plik_config, "EDebye = %lf\n", &EDebye);
-	EDebye *= mili * eV2au;
 	printf("EDebye = '%.20lf'\n", EDebye);
+	EDebye *= mili * eV2au;
 
-		printf("gN0 = '%.20lf'\n", gN0);
 	fscanf(plik_config, "gN0 = %lf\n", &gN0);
 	printf("gN0 = '%.20lf'\n", gN0);
 
-			printf("masa_e = '%.20lf'\n", masa_e);
 	fscanf(plik_config, "masa_e = %lf\n", &masa_e);
 	printf("masa_e = '%.20lf'\n", masa_e);
 
-		printf("ML = '%.20lf'\n", ML);
 	fscanf(plik_config, "ML = %lf\n", &ML);
-	ML *= nm2au;
 	printf("ML = '%.20lf'\n", ML);
+	ML *= nm2au;
 
-			printf("L_min = '%.20lf'\n", L_min);
 	fscanf(plik_config, "L_min = %lf\n", &L_min);
-	L_min *= nm2au;
 	printf("L_min = '%.20lf'\n", L_min);
+	L_min *= nm2au;
 
-				printf("L_max = '%.20lf'\n", L_max);
 	fscanf(plik_config, "L_max = %lf\n", &L_max);
-	L_max *= nm2au;
 	printf("L_max = '%.20lf'\n", L_max);
+	L_max *= nm2au;
 
-					printf("dL = '%.20lf'\n", dL);
 	fscanf(plik_config, "dL = %lf\n", &dL);
-	dL *= nm2au;
 	printf("dL = '%.20lf'\n", dL);
+	dL *= nm2au;
 
-				printf("T_min = '%.20lf'\n", T_min);
 	fscanf(plik_config, "T_min = %lf\n", &T_min);
 	printf("T_min = '%.20lf'\n", T_min);
 
-					printf("T_max = '%.20lf'\n", T_max);
 	fscanf(plik_config, "T_max = %lf\n", &T_max);
 	printf("T_max = '%.20lf'\n", T_max);
 
-					printf("dT = '%.20lf'\n", dT);
 	fscanf(plik_config, "dT = %lf\n", &dT);
 	printf("dT = '%.20lf'\n", dT);
 
-						printf("niejednorodnosc = '%d'\n", niejednorodnosc);
 	fscanf(plik_config, "niejednorodnosc = %d\n", &niejednorodnosc);
 	printf("niejednorodnosc = '%d'\n", niejednorodnosc);
 
-							printf("liczba_petli_programu = '%d'\n", liczba_petli_programu);
 	fscanf(plik_config, "liczba_petli_programu = %d\n", &liczba_petli_programu);
 	printf("liczba_petli_programu = '%d'\n", liczba_petli_programu);
 
-						printf("prog_samouzgodnienia = '%.20lf'\n", prog_samouzgodnienia);
 	fscanf(plik_config, "prog_samouzgodnienia = %lf\n", &prog_samouzgodnienia);
-	prog_samouzgodnienia *= mili * eV2au;
 	printf("prog_samouzgodnienia = '%.20lf'\n", prog_samouzgodnienia);
+	prog_samouzgodnienia *= mili * eV2au;
 
-								printf("max_liczba_iteracji = '%d'\n", max_liczba_iteracji);
 	fscanf(plik_config, "max_liczba_iteracji = %d\n", &max_liczba_iteracji);
 	printf("max_liczba_iteracji = '%d'\n", max_liczba_iteracji);
 
-						printf("prog_akceptacji_Tc = '%.20lf'\n", prog_akceptacji_Tc);
 	fscanf(plik_config, "prog_akceptacji_Tc = %lf\n", &prog_akceptacji_Tc);
 	printf("prog_akceptacji_Tc = '%.20lf'\n", prog_akceptacji_Tc);
 

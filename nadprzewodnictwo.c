@@ -15,21 +15,21 @@ const double M_PI2 = M_PI * M_PI;
 
 // PARAMETRY PROGRAMU
 int N; // liczba pasm
-double potencjal_chem = 0.9 * eV2au; // potencjal chemiczny
-double EDebye = 32.31 * mili * eV2au; // energia Debye'a
-double gN0 = 0.18; // potrzebne do stalej oddzialywania g
-double masa_e = 1.0; // masa elektronu w j. a.
-double ML = 0.286 * nm2au;
+double potencjal_chem;// = 0.9 * eV2au; // potencjal chemiczny
+double EDebye;// = 32.31 * mili * eV2au; // energia Debye'a
+double gN0;// = 0.18; // potrzebne do stalej oddzialywania g
+double masa_e;// = 1.0; // masa elektronu w j. a.
+double ML;// = 0.286 * nm2au;
 
 double L; // aktualna grubosc warstwy (zainicjalizowana w glownej petli)
-double L_min = 1. * nm2au; // poczatkowa grubosc warstwy
-double L_max = 5. * nm2au; // koncowa grubosc warstwy
-double dL = 0.05 * nm2au;
+double L_min;// = 1. * nm2au; // poczatkowa grubosc warstwy
+double L_max;// = 5. * nm2au; // koncowa grubosc warstwy
+double dL;// = 0.05 * nm2au;
 
 double T; // temperatura
-double T_min = 0.1;
-double T_max = 10.;
-double dT = 0.1;
+double T_min;// = 0.1;
+double T_max;// = 10.;
+double dT;// = 0.1;
 
 const double delta0 = 0.25 * mili * eV2au; // poczatkowa przerwa nadprzewodzaca
 double g; // stala oddzialywania elektron-fonon (zainicjalizowana w mainie)
@@ -43,11 +43,11 @@ const double k_max = 8.0 / nm2au; // k max do calkowania po k
 const double dk = 0.001 / nm2au; // dk do calkowania po k
 
 // INNE PARAMETRY
-int niejednorodnosc = 1; // czy brac pod uwage niejednorodnosc powierzchni
-int liczba_petli_programu = 100;
-double prog_samouzgodnienia = 0.0001 * mili * eV2au; // jezeli roznica pomiedzy poprzednia delta i nastepna jest mniejsza to program stopuje (na wykresie rzedu 0.01miliev)
-int max_liczba_iteracji = 1e6; // max liczba ietracji algorytmu samouzgodnienia
-double prog_akceptacji_Tc = 1e-4;
+int niejednorodnosc;// = 1; // czy brac pod uwage niejednorodnosc powierzchni
+int liczba_petli_programu;// = 100;
+double prog_samouzgodnienia;// = 0.0001 * mili * eV2au; // jezeli roznica pomiedzy poprzednia delta i nastepna jest mniejsza to program stopuje (na wykresie rzedu 0.01miliev)
+int max_liczba_iteracji;// = 1e6; // max liczba ietracji algorytmu samouzgodnienia
+double prog_akceptacji_Tc;// = 1e-4;
 
 
 void wczytajConfig() {

@@ -11,6 +11,7 @@
 
 const double h = 1.0; // h kreslone w j. a.
 const double stala_kb = 3.16681520371153e-6; // stala boltzmanna w j. a.
+const double M_PI_2 = M_PI * M_PI;
 
 // PARAMETRY PROGRAMU
 const int N = 20; // liczba pasm
@@ -100,7 +101,7 @@ double wartoscC(int i, int j) {
 }
 
 double wartoscKsi(int i) {
-	return i * i * M_PI * M_PI / (2 * masa_e * L * L);
+	return i * i * M_PI_2 / (2 * masa_e * L * L);
 }
 
 double wartoscEnergii(double k, double deltai, double ksii) {
@@ -123,11 +124,11 @@ double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j) {
 	for (k = kp; k <= kk; k += dk) {
 		
 		for (i = 0; i < N; i++) {
-			Ekin = (i+1)*(i+1)*M_PI*M_PI/(2*masa_e*L*L)+k*k/2.0/masa_e-potencjal_chem;
+			Ekin = (i+1)*(i+1)*M_PI_2/(2*masa_e*L*L)+k*k/2.0/masa_e-potencjal_chem;
 
 			if (niejednorodnosc) {
 				double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
-				Ekin += alfa * (i+1)*(i+1)*M_PI*M_PI/(masa_e*L*L*L) * ML; //ML - grubosc monolayer
+				Ekin += alfa * (i+1)*(i+1)*M_PI_2/(masa_e*L*L*L) * ML; //ML - grubosc monolayer
 			}
 
 			E=sqrt(Ekin*Ekin+poprzednia_delta[i]*poprzednia_delta[i]);
@@ -215,7 +216,7 @@ double potencjalChemicznyMetodaBisekcji(double poczatkowa_gestosc_elektronow, do
 double gestoscElektronowWModelu3D() {
 	double prog_dokladnosci = 1e-6;
 
-	double stala_przed_calka = 1.0 / 2.0 / M_PI / M_PI * pow(2.0 * masa_e / h / h * stala_kb * T, 3.0 / 2.0);
+	double stala_przed_calka = 1.0 / 2.0 / M_PI_2 * pow(2.0 * masa_e / h / h * stala_kb * T, 3.0 / 2.0);
 	double stala_w_calce = potencjal_chem / stala_kb / T;
 
 	double calka = 0.0;
@@ -284,7 +285,7 @@ void obliczanieRozkladuDeltaOdZ(double* delta_nadprzewodzaca) {
 		for (k = kp; k <= kk; k += dk) {
 			
 			for (i = 0; i < N; i++) {
-				Ekin = (i+1)*(i+1)*M_PI*M_PI/(2*masa_e*L*L)+k*k/2.0/masa_e-potencjal_chem;
+				Ekin = (i+1)*(i+1)*M_PI_2/(2*masa_e*L*L)+k*k/2.0/masa_e-potencjal_chem;
 				E=sqrt(Ekin*Ekin+delta_nadprzewodzaca[i]*delta_nadprzewodzaca[i]);
 				//printf("%e\n",Ekin/eV2au);
 				if (fabs(Ekin) <= EDebye) {				
@@ -302,7 +303,7 @@ int main() {
 	srand(time(NULL));
 
 	kF=sqrt(2.0*masa_e*potencjal_chem);
-	g = gN0 / (masa_e * kF / (2. * M_PI * M_PI));
+	g = gN0 / (masa_e * kF / (2. * M_PI_2));
 
 	T = T_min;
 
@@ -321,13 +322,13 @@ int main() {
 	FILE *plik_Tc_od_L;
 	plik_Tc_od_L = fopen("dane/Tc_od_L.txt", "w");
 
+	double poczatkowa_gestosc_elektronow = gestoscElektronowWModelu3D();
+	wypisz("Poczatkowa gestosc elektronow na cm^3", poczatkowa_gestosc_elektronow*nm2au*nm2au*nm2au*1e21);
+
 	int licznik_petli; // jesli chcemy cale obiczenia wykonac kilkukrotnie np. do obliczenia sredniej
 	for (licznik_petli = 0; licznik_petli < liczba_petli_programu; licznik_petli++) {
 		wypisz("Numer petli", licznik_petli);
 
-		double poczatkowa_gestosc_elektronow = gestoscElektronowWModelu3D();
-		wypisz("Poczatkowa gestosc elektronow na cm^3", poczatkowa_gestosc_elektronow*nm2au*nm2au*nm2au*1e21);
-		
 		// glowna petla liczaca delty dla roznych grubosci L
 		for (L = L_min; L <= L_max; L += dL) {
 		  

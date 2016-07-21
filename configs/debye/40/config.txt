@@ -1,0 +1,18 @@
+defaultowy config dla Pb
+N = 15
+potencjal_chem = 0.9
+EDebye = 40.0
+gN0 = 0.18
+masa_e = 1.0
+ML = 0.405
+L_min = 1.0
+L_max = 5.0
+dL = 0.05
+T_min = 0.1
+T_max = 1.0
+dT = 5.1
+niejednorodnosc = 0
+liczba_petli_programu = 1
+prog_samouzgodnienia = 0.0001
+max_liczba_iteracji = 1000000
+prog_akceptacji_Tc = 1e-4

@@ -47,7 +47,7 @@ int niejednorodnosc;// = 1; // czy brac pod uwage niejednorodnosc powierzchni
 int liczba_petli_programu;// = 100;
 double prog_samouzgodnienia;// = 0.0001 * mili * eV2au; // jezeli roznica pomiedzy poprzednia delta i nastepna jest mniejsza to program stopuje (na wykresie rzedu 0.01miliev)
 int max_liczba_iteracji;// = 1e6; // max liczba ietracji algorytmu samouzgodnienia
-double prog_akceptacji_Tc;// = 1e-4;
+double prog_akceptacji_Tc;// = 1e-4 * mili * eV2au;
 
 
 void wczytajConfig() {
@@ -112,6 +112,7 @@ void wczytajConfig() {
 
 	fscanf(plik_config, "prog_akceptacji_Tc = %lf\n", &prog_akceptacji_Tc);
 	printf("prog_akceptacji_Tc = '%.20lf'\n", prog_akceptacji_Tc);
+	prog_akceptacji_Tc *= mili * eV2au;
 
 	fclose(plik_config);
 }
@@ -504,7 +505,7 @@ int main() {
 					pierwsza_petla = 0;
 				}
 
-				if (nastepna_delta[0]/eV2au/mili < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
+				if (nastepna_delta[0] < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
 					fprintf(plik_Tc_od_L, "%.2f %.20f\n", L/nm2au, T);
 					break;
 				}

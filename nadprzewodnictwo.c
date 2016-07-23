@@ -506,8 +506,14 @@ int main() {
 					pierwsza_petla = 0;
 				}
 
-				if (nastepna_delta[0] < prog_akceptacji_Tc || liczba_iteracji > max_liczba_iteracji) {
+				if (nastepna_delta[0] < prog_akceptacji_Tc) {
 					fprintf(plik_Tc_od_L, "%.2f %.20f\n", L/nm2au, T);
+					break;
+				}
+
+				if (liczba_iteracji > max_liczba_iteracji) {
+					fprintf(plik_Tc_od_L, "%.2f %.20f\n", L/nm2au, T);
+					printf("Liczba iteracji przekroczyla limit dla L = %.3f i T = %.3f\n", L/nm2au, T);
 					break;
 				}
 

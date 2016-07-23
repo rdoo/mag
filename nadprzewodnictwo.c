@@ -289,7 +289,7 @@ double gestoscElektronowWModelu3D() {
 	double calka = 0.0;
 
 	double x = 0.0;
-	double dx = dz;
+	double dx = 0.01 * nm2au;
 	double przyczynek;
 	do {
 		x += dx;

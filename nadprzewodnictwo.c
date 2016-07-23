@@ -233,9 +233,12 @@ int sprawdzRoznice(double* poprzednia_delta, double* nastepna_delta) {
 double gestoscElektronow(double potencjal_chem, double* poczatkowa_delta) {
 	double calka = 0.0;
 
+	double dkGestosc = 0.001 / nm2au;
+	double dzGestosc = 0.01 * nm2au;
+
 	double k, z;
 	int i;
-	for (k = k_min; k <= k_max; k += dk) {
+	for (k = k_min; k <= k_max; k += dkGestosc) {
 		double sumaN = 0.0;
 		for (i = 0; i < N; i++) {
 			double poczatkowa_delta_i_2 = poczatkowa_delta[i] * poczatkowa_delta[i];
@@ -263,8 +266,8 @@ double gestoscElektronow(double potencjal_chem, double* poczatkowa_delta) {
 }
 
 double potencjalChemicznyMetodaBisekcji(double poczatkowa_gestosc_elektronow, double* poczatkowa_delta) {
-	double a = 0.0 * eV2au;
-	double b = 2.0 * eV2au;
+	double a = 0.8 * eV2au;
+	double b = 1.4 * eV2au;
 	double prog_dokladnosci = 1e-3 * eV2au;
 	
 	while (fabs(a - b) > prog_dokladnosci) {

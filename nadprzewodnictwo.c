@@ -309,9 +309,10 @@ void obliczanieDyspersji(double* delta_nadprzewodzaca) {
 
 	double energia_kinetyczna[N];
 	double energia_calkowita[N];
+	const double dkDyspersja = 0.001 / nm2au;
 
 	double k;
-	for (k = k_min; k <= k_max; k += dk) {
+	for (k = k_min; k <= k_max; k += dkDyspersja) {
 		fprintf(plik_energia_od_k, "%.3f", k*nm2au);
 
 		int i;
@@ -321,11 +322,11 @@ void obliczanieDyspersji(double* delta_nadprzewodzaca) {
 		}
 
 		for (i = 0; i < 4; i++) {
-			fprintf(plik_energia_od_k, " %.20f", energia_calkowita[i]/eV2au/mili);
+			fprintf(plik_energia_od_k, " %.4f", energia_calkowita[i]/eV2au/mili);
 		}
 
 		for (i = 0; i < 4; i++) {
-			fprintf(plik_energia_od_k, " %.20f", energia_kinetyczna[i]/eV2au/mili);
+			fprintf(plik_energia_od_k, " %.4f", energia_kinetyczna[i]/eV2au/mili);
 		}
 
 		fprintf(plik_energia_od_k, "\n");

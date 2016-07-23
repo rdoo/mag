@@ -342,11 +342,11 @@ void obliczanieRozkladuDeltaOdZ(double* delta_nadprzewodzaca) {
 
 	double kp = k_min; // k poczatkowe
 	double kk = k_max; // k koncowe
-
+	const double dzDeltaOdZ = 0.01 * nm2au;
 
 	int i;
 	double z, k, E, Ekin;
-	for (z = 0.0; z <= L; z += dz) {
+	for (z = 0.0; z <= L; z += dzDeltaOdZ) {
 		double calka = 0.;
 
 		for (k = kp; k <= kk; k += dk) {

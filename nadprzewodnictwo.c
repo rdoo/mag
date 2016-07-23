@@ -120,9 +120,9 @@ void wczytajConfig() {
 // pomocnicza funkcja wypisujaca na ekran
 void wypisz(char* string, double value) {
 	if (fabs(value) > 0.001 && fabs(value) < 1000) {
-		printf("%s: %.3f\n", string, value);
+		printf("%s: %.5f\n", string, value);
 	} else {
-		printf("%s: %.2e\n", string, value);
+		printf("%s: %.5e\n", string, value);
 	}
 }
 

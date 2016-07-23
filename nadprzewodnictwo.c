@@ -360,7 +360,7 @@ void obliczanieRozkladuDeltaOdZ(double* delta_nadprzewodzaca) {
 				}
 			}
 		}
-		fprintf(plik_delta_od_z, "%.3f %.20f\n", z/nm2au, calka/eV2au/mili);
+		fprintf(plik_delta_od_z, "%.3f %.3f\n", z/nm2au, calka/eV2au/mili);
 	}
 
 	fclose(plik_delta_od_z);

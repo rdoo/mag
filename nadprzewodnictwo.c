@@ -238,19 +238,20 @@ double gestoscElektronow(double potencjal_chem, double* poczatkowa_delta) {
 	for (k = k_min; k <= k_max; k += dk) {
 		double sumaN = 0.0;
 		for (i = 0; i < N; i++) {
+			double poczatkowa_delta_i_2 = poczatkowa_delta[i] * poczatkowa_delta[i];
 			double calkaZ = 0.0;
 			for (z = 0; z <= L; z += dz) {
-				double energia_kinetyczna = wartoscKsi(i+1) + h*h*k*k/(2*masa_e) - potencjal_chem;
-				double energia_calkowita = sqrt(energia_kinetyczna * energia_kinetyczna + poczatkowa_delta[i] * poczatkowa_delta[i]);
+				double energia_kinetyczna = wartoscKsi(i+1) + k*k/(2*masa_e) - potencjal_chem;
+				double energia_calkowita = sqrt(energia_kinetyczna * energia_kinetyczna + poczatkowa_delta_i_2);
 				double suma = energia_kinetyczna + energia_calkowita;
-				double pierwiastek = sqrt(suma * suma + poczatkowa_delta[i] * poczatkowa_delta[i]);
+				double suma_2 = suma * suma;
+				double pierwiastek_2 = suma_2 + poczatkowa_delta_i_2;
 				double wartosc_f_falowej = wartoscFunkcjiFalowejStudni(z, i+1);
+				double wartosc_f_falowej_2 = wartosc_f_falowej * wartosc_f_falowej;
 
-				double U = suma / pierwiastek;
-				double V = poczatkowa_delta[i] / pierwiastek;
 				double fE = wartoscRozkladuFermiego(energia_calkowita);
 
-				calkaZ += U*U*wartosc_f_falowej*wartosc_f_falowej*fE+V*V*wartosc_f_falowej*wartosc_f_falowej*(1-fE);
+				calkaZ += (suma_2*fE+poczatkowa_delta_i_2*(1-fE))*wartosc_f_falowej_2/pierwiastek_2;
 			}
 			calkaZ *= dz;
 

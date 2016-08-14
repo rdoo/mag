@@ -36,11 +36,11 @@ double g; // stala oddzialywania elektron-fonon (zainicjalizowana w mainie)
 double kF; // wektor Fermiego
 
 // PARAMETRY CALKOWANIA
-const double dz = 0.01 * nm2au; // przedzial calkowania 
+double dz;// = 0.01 * nm2au; // przedzial calkowania 
 
 const double k_min = 0.0 / nm2au; // k min do calkowania po k
 const double k_max = 8.0 / nm2au; // k max do calkowania po k
-const double dk = 0.001 / nm2au; // dk do calkowania po k
+double dk;// = 0.001 / nm2au; // dk do calkowania po k
 
 // INNE PARAMETRY
 int niejednorodnosc;// = 1; // czy brac pod uwage niejednorodnosc powierzchni
@@ -113,6 +113,14 @@ void wczytajConfig() {
 	fscanf(plik_config, "prog_akceptacji_Tc = %lf\n", &prog_akceptacji_Tc);
 	printf("prog_akceptacji_Tc = '%.20lf'\n", prog_akceptacji_Tc);
 	prog_akceptacji_Tc *= mili * eV2au;
+
+	fscanf(plik_config, "dz = %lf\n", &dz);
+	printf("dz = '%.20lf'\n", dz);
+	dz *= nm2au;
+
+	fscanf(plik_config, "dk = %lf\n", &dk);
+	printf("dk = '%.20lf'\n", dk);
+	dk /= nm2au;
 
 	fclose(plik_config);
 }

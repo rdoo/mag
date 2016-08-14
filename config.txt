@@ -16,3 +16,5 @@ liczba_petli_programu = 100
 prog_samouzgodnienia = 0.0001
 max_liczba_iteracji = 1000000
 prog_akceptacji_Tc = 1e-4
+dz = 0.01
+dk = 0.001

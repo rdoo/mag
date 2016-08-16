@@ -1,0 +1,20 @@
+defaultowy config dla Sn
+N = 20
+potencjal_chem = 0.9
+EDebye = 16.80
+gN0 = 0.25
+masa_e = 1.0
+ML = 0.286
+L_min = 1.
+L_max = 5.
+dL = 0.02
+T_min = 0.1
+T_max = 10.
+dT = 0.05
+niejednorodnosc = 0
+liczba_petli_programu = 100
+prog_samouzgodnienia = 0.0001
+max_liczba_iteracji = 10000
+prog_akceptacji_Tc = 1e-4
+dz = 0.005
+dk = 0.0005

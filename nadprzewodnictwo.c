@@ -251,7 +251,7 @@ double gestoscElektronow(double potencjal_chem, double* poczatkowa_delta) {
 		for (i = 0; i < N; i++) {
 			double poczatkowa_delta_i_2 = poczatkowa_delta[i] * poczatkowa_delta[i];
 			double calkaZ = 0.0;
-			for (z = 0; z <= L; z += dz) {
+			for (z = 0; z <= L; z += dzGestosc) {
 				double energia_kinetyczna = wartoscKsi(i+1) + k*k/(2*masa_e) - potencjal_chem;
 				double energia_calkowita = sqrt(energia_kinetyczna * energia_kinetyczna + poczatkowa_delta_i_2);
 				double suma = energia_kinetyczna + energia_calkowita;
@@ -264,13 +264,13 @@ double gestoscElektronow(double potencjal_chem, double* poczatkowa_delta) {
 
 				calkaZ += (suma_2*fE+poczatkowa_delta_i_2*(1-fE))*wartosc_f_falowej_2/pierwiastek_2;
 			}
-			calkaZ *= dz;
+			calkaZ *= dzGestosc;
 
 			sumaN += calkaZ;
 		}
 		calka += sumaN * k;
 	}
-	return calka * dk / M_PI / L;
+	return calka * dkGestosc / M_PI / L;
 }
 
 double potencjalChemicznyMetodaBisekcji(double poczatkowa_gestosc_elektronow, double* poczatkowa_delta) {

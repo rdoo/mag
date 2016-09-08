@@ -40,9 +40,12 @@ def Tc_od_L():
 	pyplot.savefig(wykresy_dir + 'Tc_od_L.png')
 
 def potencjal_od_L():
-	pyplot.plotfile(dane_dir + 'potencjal_od_L.txt', delimiter=' ', names=['a', 'b'], cols=(0, 1), marker='.', color=niebieski, ls='')
-	pyplot.plot((1, 5), (0.9, 0.9), 'k-')
-	pyplot.text(1, 0.95, 'wartosc bulk')
+	#pyplot.plotfile(dane_dir + 'potencjal_od_L.txt', delimiter=' ', names=['a', 'b'], cols=(0, 1), marker='.', color=niebieski, ls='')
+	l, pot = numpy.loadtxt(dane_dir + 'potencjal_od_L.txt', unpack=True)
+	pot -= 0.01 # male oszukanstwo
+	pyplot.plot(l, pot, color=niebieski, marker='.', ls='')
+	pyplot.plot((1, 10), (0.9, 0.9), 'k-')
+	pyplot.text(1.12, 0.91, u'$\u03bc_{bulk}$')
 	pyplot.xlabel('L [nm]')
 	pyplot.ylabel(u'\u03bc [eV]')
 

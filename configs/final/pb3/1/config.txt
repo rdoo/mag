@@ -15,6 +15,6 @@ niejednorodnosc = 0
 liczba_petli_programu = 100
 prog_samouzgodnienia = 0.0001
 max_liczba_iteracji = 10000
-prog_akceptacji_Tc = 1e-4
+prog_akceptacji_Tc = 3e-4
 dz = 0.005
 dk = 0.0005

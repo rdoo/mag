@@ -201,14 +201,14 @@ double wartoscDelta(double* poprzednia_delta, double (*C)[N], int j) {
 		for (i = 0; i < N; i++) {
 			Ekin = (i+1)*(i+1)*M_PI2/(2*masa_e*L*L)+k*k/2.0/masa_e-potencjal_chem;
 
-			if (niejednorodnosc) {
-				double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
-				Ekin += alfa * (i+1)*(i+1)*M_PI2/(masa_e*L*L*L) * ML; //ML - grubosc monolayer
-			}
-
-			E=sqrt(Ekin*Ekin+poprzednia_delta[i]*poprzednia_delta[i]);
 			//printf("%e\n",Ekin/eV2au);
-			if (fabs(Ekin) <= EDebye) {				
+			if (fabs(Ekin) <= EDebye) {	
+				if (niejednorodnosc) {
+					double alfa = (double)rand() / (double)RAND_MAX * 2 - 1; // liczba losowa z przedzialu -1 do 1 TODO: dobrze?
+					Ekin += alfa * (i+1)*(i+1)*M_PI2/(masa_e*L*L*L) * ML; //ML - grubosc monolayer
+				}
+
+				E=sqrt(Ekin*Ekin+poprzednia_delta[i]*poprzednia_delta[i]);			
 				calka += (g/(2.0*M_PI))*C[i][j]*poprzednia_delta[i]/(2.0*E)*(1.0 - 2.0 * wartoscRozkladuFermiego(E))*k*dk;
 			}
 		}

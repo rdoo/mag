@@ -1,0 +1,20 @@
+defaultowy config dla al
+N = 20
+potencjal_chem = 0.9
+EDebye = 32.31
+gN0 = 0.18
+masa_e = 1.0
+ML = 0.405
+L_min = 7.04081632653
+L_max = 8.
+dL = 3.
+T_min = 0.1
+T_max = 10.
+dT = 0.1
+niejednorodnosc = 1
+liczba_petli_programu = 20
+prog_samouzgodnienia = 0.0001
+max_liczba_iteracji = 10000
+prog_akceptacji_Tc = 1e-4
+dz = 0.005
+dk = 0.0005
